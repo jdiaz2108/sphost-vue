@@ -1,12 +1,11 @@
 <template>
   <v-toolbar
-     
       fixed
       clipped-left
       app
     >
-      <v-toolbar-side-icon @click.stop="$root.$data.drawer = !$root.$data.drawer"></v-toolbar-side-icon>
-      <v-img src="/images/logointranet.jpg" alt="Logo" max-height="46.5" max-width="145" :aspect-ratio="19/8"></v-img>
+      <v-toolbar-side-icon @click.stop="$root.drawer = !$root.drawer"></v-toolbar-side-icon>
+      <v-img :src="$root.linkLogo" alt="Logo" max-height="46.5" max-width="145" :aspect-ratio="19/8"></v-img>
       <v-spacer></v-spacer>
 <!--       <v-text-field
       v-if="$vuetify.breakpoint.mdAndDown"
@@ -37,7 +36,7 @@
         <v-btn icon large v-on="on">
         <v-avatar size="40px">
           <img
-            src="/storage/1.jpg"
+            src="https://cdn.vuetifyjs.com/images/john.jpg"
             alt="Vuetify"
           >
         </v-avatar>
@@ -90,11 +89,10 @@
           <v-spacer></v-spacer>
 
 
-          <v-btn class="nav-link text-danger" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">Logout</v-btn>
+          <v-btn class="nav-link text-danger" color="red" @click="logout($root)">Logout</v-btn>
 
           <v-btn flat @click="menu = false">Cancel</v-btn>
-          <v-btn color="primary" flat @click="menu = false">Save</v-btn>
+          <v-btn color="grey" @click="menu = false">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -104,6 +102,38 @@
   
 </template>
 
+<script>
+  import Vuetify from 'vuetify'
+  export default {
+      data: () => ({
+        fav: true,
+      menu: false,
+      message: false,
+      hints: true,
+      items: [
+        { icon: 'trending_up', text: 'Most Popular' },
+        { icon: 'subscriptions', text: 'Subscriptions' },
+        { icon: 'history', text: 'History' },
+        { icon: 'featured_play_list', text: 'Playlists' },
+        { icon: 'watch_later', text: 'Watch Later' }
+      ],
+      items2: [
+        { picture: 28, text: 'Joseph' },
+        { picture: 38, text: 'Apple' },
+        { picture: 48, text: 'Xbox Ahoy' },
+        { picture: 58, text: 'Nokia' },
+        { picture: 78, text: 'MKBHD' }
+      ]
+    }),
+    methods: {
+      logout: function (root) {
+        localStorage.removeItem('Authorization')
+        console.log(root);
+        root.auth = false;
+      }
+    },
+    }
+</script>
 
 <style>
 

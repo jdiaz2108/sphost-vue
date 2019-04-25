@@ -1,25 +1,24 @@
 <template>
   <v-navigation-drawer class="menu" v-model="$root.$data.drawer" fixed clipped dark app>
-        <v-list dense>
-            <v-list-tile avatar tag="div" v-if="$vuetify.breakpoint.mdAndDown">
-                <v-toolbar-side-icon @click.stop="$root.$data.drawer = !$root.$data.drawer"></v-toolbar-side-icon>
-                <v-list-tile-content>
-                    <img src="/images/logointranet.jpg">
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-divider v-if="$vuetify.breakpoint.mdAndDown"></v-divider>
+    <v-list dense>
+      <v-list-tile avatar tag="div" v-if="$vuetify.breakpoint.mdAndDown">
+        <v-toolbar-side-icon @click.stop="$root.$data.drawer = !$root.$data.drawer"></v-toolbar-side-icon>
+        <v-list-tile-content>
+          <img :src="$root.$data.linkLogo">
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-divider v-if="$vuetify.breakpoint.mdAndDown"></v-divider>
 
-            <v-subheader class="mt-3 text--white">GESTION USUARIOS</v-subheader>
-
-            <v-list-tile href="/">
-                <v-list-tile-action>
-                    <v-icon>home</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-title>Inicio</v-list-tile-title>
-            </v-list-tile>
-        </v-list>
-
-
+      <v-subheader class="mt-3 text--white">GESTION USUARIOS</v-subheader>
+      <router-link class="router-links" to="/" exact>
+        <v-list-tile href="/">
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>Inicio</v-list-tile-title>
+        </v-list-tile>
+      </router-link>
+    </v-list>
 
     <v-list dense>
       <v-list-group v-for="item in items" :key="item.title" v-model="item.active" :prepend-icon="item.action" no-action>
@@ -28,14 +27,15 @@
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile>
         </template>
+        <router-link class="router-links" :to="subItem.action" v-for="subItem in item.items" :key="subItem.title">
+          <v-list-tile>
+            <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
 
-        <v-list-tile v-for="subItem in item.items" :key="subItem.title" @click="" :href="subItem.action">
-          <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
-
-          <v-list-tile-action>
-            <v-icon light>{{ item.action }}</v-icon>
-          </v-list-tile-action>
-        </v-list-tile>
+            <v-list-tile-action>
+              <v-icon light>{{ item.action }}</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </router-link>
 
       </v-list-group>
 
@@ -56,80 +56,47 @@
 </template>
 
 <script>
-  export default {
-data: () => ({
-        items: [
-          {
-            action: 'account_circle',
-            title: 'Clientes',
-            items: [
-              { title: 'Listar Clientes',
-                action: '/clientes' },
-                { title: 'Crear Cliente',
-                action: '/clientes/create' }
-            ]
+export default {
+  created() {
+    this.drawerMDown();
+  },
+  data: () => ({
+    items: [{
+        action: 'account_circle',
+        title: 'Clientes',
+        items: [{
+            title: 'Listar Clientes',
+            action: '/cliente'
           },
           {
-            action: 'description',
-            title: 'Factura',
-            items: [
-              { title: 'Listar Facturas',
-                action: '/factura' },
-                { title: 'Crear Factura',
-                action: '/factura/create' }
-            ]
-          },
-          {
-            action: 'beenhere',
-            title: 'Paz y Salvo',
-            items: [
-              { title: 'Estado',
-              action: '/pysEstado' },
-              { title: 'Procesos Activos',
-              action: '/pys' }
-            ]
-          },
-          {
-            action: 'accessibility',
-            title: 'Persmisos',
-            items: [
-              { title: 'Solicitud Permiso',
-              action: '/permisos' }
-            ]
-          },
-          {
-            action: 'person_pin_circle',
-            title: 'Mapa',
-            active: true,
-            items: [
-              { title: 'Geolocalizador',
-              action: '/map' }
-            ]
-          },
-          {
-            action: 'alarm_add',
-            title: 'Health',
-            items: [
-              { title: 'List Item' }
-            ]
-          },
-          {
-            action: 'content_cut',
-            title: 'Office',
-            items: [
-              { title: 'List Item' }
-            ]
-          },
-          {
-            action: 'local_offer',
-            title: 'Promotions',
-            items: [
-              { title: 'List Item' }
-            ]
+            title: 'Crear Cliente',
+            action: '/cliente/create'
           }
-        ],
-    })
+        ]
+      },
+      {
+        action: 'description',
+        title: 'Factura',
+        items: [{
+            title: 'Listar Facturas',
+            action: '/map'
+          },
+          {
+            title: 'Crear Factura',
+            action: '/factura/create'
+          }
+        ]
+      }
+    ],
+  }),
+  methods: {
+    drawerMDown: function () {
+      if (this.$vuetify.breakpoint.mdAndDown) {
+        this.$root.drawer = false;
+      }
+    }
   }
+}
 </script>
 
 <style>
@@ -163,7 +130,19 @@ data: () => ({
   .v-btn .v-btn__content .v-icon,
   .theme--light.v-btn,
   .theme--light.v-icon {
+    color: #ffffff; 
+  }
+
+  .router-links {
     color: #ffffff;
+    text-decoration: none;
+  }
+  .router-link-exact-active {
+    color: #ffffff;
+  } 
+  .router-link-active {
+    background-color: #f00;
+        color: burlywood;
   }
 
 </style>

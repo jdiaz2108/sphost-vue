@@ -1,12 +1,15 @@
 <template>
   <div id="app">
-    <v-app>
-    <topbar></topbar>
-    <leftPanel></leftPanel>
-      <v-content>
+    <v-app v-if="$root.$data.auth">
+      <topbar></topbar>
+      <leftPanel></leftPanel>
+      <v-content class="m-4">
         <v-layout justify-center align-center column>
-
-          <router-view />
+          <div class="row w-100">
+            <div class="col-lg-12">
+              <router-view />
+            </div>
+          </div>
         </v-layout>
       </v-content>
     </v-app>
