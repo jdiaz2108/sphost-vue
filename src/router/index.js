@@ -5,6 +5,8 @@ import Cliente from '@/components/clientes/cliente.vue'
 import ListClientes from '@/components/clientes/listCliente'
 import Factura from '@/components/facturas/Factura'
 import ListFactura from '@/components/facturas/listFactura'
+import Products from '@/components/products/products'
+import ListProducts from '@/components/products/listProducts'
 
 Vue.use(Router)
 
@@ -41,6 +43,20 @@ export default new Router({
     {
       path: '/facturas/:slug',
       component: Factura,
+      meta: {crudStatus: 'show'}
+    },
+    {
+      path: '/productos',
+      component: ListProducts
+    },
+    {
+      path: '/productos/create',
+      component: Products,
+      meta: {crudStatus: 'create'}
+    },
+    {
+      path: '/productos/:slug',
+      component: Products,
       meta: {crudStatus: 'show'}
     }
   ],

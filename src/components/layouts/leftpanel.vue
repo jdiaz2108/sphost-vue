@@ -86,6 +86,19 @@ export default {
             action: '/facturas/create'
           }
         ]
+      },
+      {
+        action: 'archive',
+        title: 'Productos',
+        items: [{
+            title: 'Listar Productos',
+            action: '/productos'
+          },
+          {
+            title: 'Crear Producto',
+            action: '/productos/create'
+          }
+        ]
       }
     ]
   }),

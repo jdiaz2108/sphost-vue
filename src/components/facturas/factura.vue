@@ -14,39 +14,7 @@
                     <v-spacer></v-spacer>
                     <button type="button" class="close" @click="dialogProductos = false">&times;</button>
                 </v-card-title>
-
-                <div class="px-5">
-                    <div class="x_panel">
-                        <div class="x_content">
-                            <table id="datatable-fixed-header" class="table table-hover table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Inventario</th>
-                                        <th scope="col">Descripcion</th>
-                                        <th scope="col">Valor Unitario</th>
-                                        <th scope="col">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="producto, key in productoObjetos" v-bind="key">
-                                        <td>{{ producto.nombre }}</td>
-                                        <td>{{ producto.qty }}</td>
-                                        <td>
-                                            <p>{{ producto.descripcion}}</p>
-                                        </td>
-                                        <td>{{ producto.valor }}</td>
-                                        <td><button class="btn btn-primary btn-xs" type="button"
-                                                @click="addProducto(key)"><i class="fa fa-plus"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
+                <ListProducts :selectList="true" v-on:onClickButton="addProducto($event)"></ListProducts>
                 <v-card-actions>
                     <v-btn color="blue-grey lighten-4" @click="dialogProductos = false"><i
                             class="fa fa-times-circle mr-3"></i>
@@ -240,10 +208,12 @@
 
 <script>
 import ListClientes from './../clientes/listCliente'
+import ListProducts from './../products/listProducts'
     import axios from 'axios'
     export default {
       components: {
-    ListClientes
+    ListClientes,
+    ListProducts
   },
       created() {
 
@@ -357,20 +327,19 @@ import ListClientes from './../clientes/listCliente'
                 this.cliente = params;
                 this.dialogClientes = false;
             },
-            addProducto: function (id) {
-                this.dialogProductos = false;
-                this.newProducto.push({
-                    producto_id: this.products[id].id,
-                    nombre: this.products[id].nombre,
-                    valor: this.products[id].valor,
-                    descripcion: this.products[id].descripcion,
-                    qty: this.products[id].qty,
-                    total: this.products[id].total,
-                });
-                this.products[id].qty = 1;
-                this.products[id].total = this.products[id].valor;
-                this.totals();
-                //alert(JSON.stringify(this.productos[id]));
+            addProducto: function (params) {
+                console.log(params);
+                 this.dialogProductos = false;
+                 this.newProducto.push({
+                     producto_id: params.id,
+                     nombre: params.nombre,
+                     valor: params.valor,
+                     descripcion: params.descripcion,
+                     qty: params.qty,
+                     total: params.valor,
+                 });
+                 this.totals();
+                 alert(JSON.stringify(this.productos[params.id]));
             },
             delProducto: function (id) {
                 this.newProducto.splice(id, 1);
