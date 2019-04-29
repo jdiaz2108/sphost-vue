@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "sweetalert2": "^8.8.7",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vue-sweetalert2": "^1.6.4",
     "vuetify": "^1.5.13"
   },
   "devDependencies": {
@@ -67,6 +67,7 @@
     "selenium-server": "^3.0.1",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
+    "sweetalert2": "^8.8.7",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
     "vue-jest": "^1.0.2",

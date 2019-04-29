@@ -7,31 +7,30 @@
         <v-layout justify-center align-center column>
           <div class="row w-100">
             <div class="col-lg-12">
-              <router-view />
+              <router-view :key="$route.fullPath" />
             </div>
           </div>
         </v-layout>
       </v-content>
     </v-app>
+    <authComponent v-if="!$root.$data.auth"></authComponent>
   </div>
 </template>
 
 <script>
 import leftPanel from './components/layouts/leftpanel'
 import topbar from './components/layouts/topbar'
+import authComponent from './components/auth/auth'
 export default {
   name: 'App',
   components: {
     topbar,
-    leftPanel
+    leftPanel,
+    authComponent
   },
   data () {
       return {
-        drawer: null,
-        items: [
-          { title: 'Home', icon: 'dashboard' },
-          { title: 'About', icon: 'question_answer' }
-        ]
+        drawer: null
       }
     }
 }

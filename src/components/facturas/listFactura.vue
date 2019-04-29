@@ -1,11 +1,11 @@
 <template>
   <v-card>
     <v-card-title>
-      Lista Clientes
+      Lista Facturas
       <v-spacer></v-spacer>
       <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
     </v-card-title>
-    <v-data-table  :headers="headers" :items="clientes" :search="search" :rows-per-page-items="rows" class="elevation-1" light>
+    <v-data-table  :headers="headers" :items="facturas" :search="search" :rows-per-page-items="rows" class="elevation-1" light>
       <template v-slot:items="props">
         <td class="text-xs-left">{{ props.item.nombre }}</td>
         <td class="text-xs-left">{{ props.item.nit }}</td>
@@ -14,10 +14,9 @@
         <td class="text-xs-left">{{ props.item.direccion }}</td>
         <td class="text-xs-left">{{ props.item.ciudad }}</td>
         <td>
-          <router-link v-if="!selectList" class="router-links" :to="'/cliente/'+props.item.slug">
+          <router-link class="router-links" :to="'/cliente/'+props.item.slug">
             <button class="btn btn-primary">Ver</button>
           </router-link>
-          <button v-if="selectList" @click="onClickButton(props.item)" class="btn btn-success">Seleccionar</button>
         </td>
       </template>
       <template v-slot:pageText="props">
@@ -35,20 +34,16 @@
 <script>
   import axios from 'axios'
   export default {
-    props: ['selectList'],
     created() {
-      this.getAllClientes();
+      this.getAllFacturas();
     },
     methods: {
-      onClickButton: function (event) {
-      this.$emit('onClickButton', event);
-    },
-      getAllClientes: function (id) {
+      getAllFacturas: function (id) {
         axios({
             method: 'get',
-            url: '/clientes',
+            url: '/factura',
           })
-          .then(response => (this.clientes = response.data.data))
+          .then(response => (this.facturas = response.data.data))
           .catch(function (err) {
             console.log(err)
           })
@@ -56,7 +51,7 @@
     },
     data() {
       return {
-        clientes: [],
+        facturas: [],
         search: '',
         headers: [{
             text: 'Nombre Cliente',

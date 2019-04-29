@@ -3,6 +3,7 @@
       fixed
       clipped-left
       app
+      dark
     >
       <v-toolbar-side-icon @click.stop="$root.drawer = !$root.drawer"></v-toolbar-side-icon>
       <v-img :src="$root.linkLogo" alt="Logo" max-height="46.5" max-width="145" :aspect-ratio="19/8"></v-img>
@@ -25,7 +26,7 @@
       </v-btn>
 
       <div class="text-xs-center">
-        
+
     <v-menu
       v-model="menu"
       :close-on-content-click="false"
@@ -43,7 +44,7 @@
       </v-btn>
       </template>
 
-      <v-card>
+      <v-card light>
         <v-list>
           <v-list-tile avatar>
             <v-list-tile-avatar>
@@ -98,8 +99,8 @@
     </v-menu>
   </div>
     </v-toolbar>
-    
-  
+
+
 </template>
 
 <script>
@@ -151,5 +152,5 @@
     background: url('https://demos.creative-tim.com/now-ui-kit-angular/assets/img/header.jpg') 0 0 / cover no-repeat fixed;
     position: relative;
   }
-  
+
 </style>

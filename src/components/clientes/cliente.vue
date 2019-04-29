@@ -53,7 +53,7 @@
             </div>
 
             <div class="dropdown-divider"></div>
-            <div v-if="crudstatus == 'show'">
+            <div v-if="this.$route.meta.crudStatus == 'show'">
                 <div v-if="disabled == true">
                     <a role="button" @click="disabled = false; title = 'Editar cliente'" class="btn btn-primary btn-lg text-light float-right"><i
                             class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar</a>
@@ -77,20 +77,28 @@
 </template>
 
 <script>
-    import Swal from "sweetalert2"
     import axios from 'axios'
     export default {
         created() {
-
+                // Swal({
+                //     title: 'alert',
+                //     type: 'title',
+                //     confirmButtonText: 'Aceptar',
+                //     showConfirmButton: false,
+                //     timer: 1500
+                // });
+      console.log('creado');
         },
         mounted() {
-            if (this.crudstatus == 'show') {
+            if (this.$route.meta.crudStatus == 'show') {
                  this.title = 'Ver Cliente';
                  this.getCliente();
+                       console.log('montado show');
             } else {
                 this.title = 'Crear Cliente';
                 this.cliente.ide = 0;
                 this.disabled = false;
+                      console.log('montado create');
             }
         },
         data() {
@@ -117,9 +125,19 @@
             }
         },
         methods: {
+        alertSwal(type, title){
+            // Use sweetalert2
+            this.$swal({
+                    title: title,
+                    type: type,
+                    confirmButtonText: 'Aceptar',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+        },
             getCliente: function () {
                 axios
-                    .get('/clientes/njRXzSpqFUr7QPPt')
+                    .get('/clientes/'+this.$route.params.slug)
                     .then(response => {
                         this.cliente = response.data.data
                     })
@@ -130,7 +148,7 @@
             updateCliente: function () {
                 axios({
                         method: 'put',
-                        url: '/clientes/njRXzSpqFUr7QPPt',
+                        url: '/clientes/'+this.$route.params.slug,
                         data: this.cliente,
                     })
                     .then(response => {
@@ -147,7 +165,7 @@
             createCliente: function () {
                     axios({
                             method: 'post',
-                            url: '/api/clientes',
+                            url: '/clientes',
                             data: this.cliente,
                         })
                         .then(response => {
@@ -157,23 +175,13 @@
                             this.cliente.slug = response.data;
                             // console.log(response.data);
                             this.alertSwal('success', 'Se ha creado nuevo Cliente');
-                            setTimeout(window.location = "/clientes/"+ response.data , 2000);
-
+                            this.$router.push({ path: '/cliente/'+this.cliente.slug });
                         })
                         .catch(error => {
                             this.errors = error.response.data.errors;
                             console.log(error.response.data.errors)
                         })
             },
-            alertSwal: function (title, alert) {
-                Swal({
-                    title: alert,
-                    type: title,
-                    confirmButtonText: 'Aceptar',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            }
         }
     }
 </script>

@@ -79,15 +79,15 @@ export default {
         title: 'Factura',
         items: [{
             title: 'Listar Facturas',
-            action: '/map'
+            action: '/facturas'
           },
           {
             title: 'Crear Factura',
-            action: '/factura/create'
+            action: '/facturas/create'
           }
         ]
       }
-    ],
+    ]
   }),
   methods: {
     drawerMDown: function () {
@@ -102,7 +102,7 @@ export default {
 <style>
 
   .menu:before {
-    background: linear-gradient(0deg,rgba(44,44,44,.2),rgba(41, 33, 32, 0.6));
+    background: linear-gradient(0deg,rgba(44,44,44,.2),rgba(255, 255, 255, 0.6));
     content: '';
     height: 100%;
     left: 0;
@@ -113,13 +113,14 @@ export default {
 
   .menu {
     background: url('https://demos.creative-tim.com/now-ui-kit-angular/assets/img/header.jpg') 35% 0 / cover no-repeat scroll;
+
   }
 
   .v-navigation-drawer .v-list,
   .theme--light.v-list {
     background: none;
   }
-  
+
   .v-list__group__header--active {
     background-color: rgba(151, 153, 162, 0.4);
     border-radius: 0 0 20px 20px;
@@ -127,10 +128,8 @@ export default {
   }
 
   .v-list__group__header--active .v-list__group__header__prepend-icon .v-icon,
-  .v-btn .v-btn__content .v-icon,
-  .theme--light.v-btn,
-  .theme--light.v-icon {
-    color: #ffffff; 
+ {
+    color: #ffffff;
   }
 
   .router-links {
@@ -139,7 +138,7 @@ export default {
   }
   .router-link-exact-active {
     color: #ffffff;
-  } 
+  }
   .router-link-active {
     background-color: #f00;
         color: burlywood;
