@@ -13,9 +13,10 @@
         </v-layout>
       </v-content>
     </v-app>
-    <authComponent v-if="!$root.$data.auth"></authComponent>
+    <router-view :key="$route.fullPath" v-if="!$root.$data.auth"/>
   </div>
 </template>
+
 
 <script>
 import leftPanel from './components/layouts/leftpanel'

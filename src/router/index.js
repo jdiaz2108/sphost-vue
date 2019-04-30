@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
+import logComponent from '@/components/auth/auth'
 import Cliente from '@/components/clientes/cliente.vue'
 import ListClientes from '@/components/clientes/listCliente'
 import Factura from '@/components/facturas/Factura'
@@ -15,49 +16,57 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld
+      component: HelloWorld,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/login',
+      component: logComponent
     },
     {
       path: '/cliente',
-      component: ListClientes
+      component: ListClientes,
+      meta: { requiresAuth: true }
     },
     {
       path: '/cliente/create',
       component: Cliente,
-      meta: {crudStatus: 'create'}
+      meta: {crudStatus: 'create', requiresAuth: true}
     },
     {
       path: '/cliente/:slug',
       component: Cliente,
-      meta: {crudStatus: 'show'}
+      meta: {crudStatus: 'show', requiresAuth: true}
     },
     {
       path: '/facturas',
-      component: ListFactura
+      component: ListFactura,
+      meta: { requiresAuth: true }
     },
     {
       path: '/facturas/create',
       component: Factura,
-      meta: {crudStatus: 'create'}
+      meta: {crudStatus: 'create', requiresAuth: true}
     },
     {
       path: '/facturas/:slug',
       component: Factura,
-      meta: {crudStatus: 'show'}
+      meta: {crudStatus: 'show', requiresAuth: true}
     },
     {
       path: '/productos',
-      component: ListProducts
+      component: ListProducts,
+      meta: { requiresAuth: true }
     },
     {
       path: '/productos/create',
       component: Products,
-      meta: {crudStatus: 'create'}
+      meta: {crudStatus: 'create', requiresAuth: true}
     },
     {
       path: '/productos/:slug',
       component: Products,
-      meta: {crudStatus: 'show'}
+      meta: {crudStatus: 'show', requiresAuth: true}
     }
   ],
   mode: 'history'

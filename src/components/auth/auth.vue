@@ -1,5 +1,5 @@
 <template>
-  <div class="container auth">
+  <div class="container-fluid auth">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card mt-25 border-secondary">
@@ -8,13 +8,13 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="">
+                    <form method="POST" action="" @submit.prevent="doLogin()">
 
                         <div class="form-group row">
                             <label for="email" class="col-sm-4 col-form-label text-md-right">Correo:</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="email" required autofocus>
+                                <input id="email" type="email" class="form-control" name="email" value="email" v-model="email" required autofocus>
 <!-- {{ $errors->has('email') ? ' is-invalid' : '' }} -->
                                 <!-- @if ($errors->has('email'))
                                     <span class="invalid-feedback" role="alert">
@@ -28,7 +28,7 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">Contraseña:</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                                <input v-model="password" id="password" type="password" class="form-control" name="password" required>
 
                                 <!-- @if ($errors->has('password'))
                                     <span class="invalid-feedback" role="alert">
@@ -53,7 +53,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Loguin
+                                    Login
                                 </button>
 
                                 <!-- @if (Route::has('password.request'))
@@ -72,11 +72,41 @@
 </div>
 </template>
 <script>
+    import axios from 'axios'
 export default {
   data() {
     return {
-      key: 'value'
+email: null,
+password: null,
+      key: 'value',
+      errors: []
     }
+  },
+  methods: {
+                doLogin: function() {
+                axios.post('/auth/login', {
+                    email: this.email,
+                    password: this.password
+                  })
+                  .then(response => {
+                    localStorage.Authorization = response.data.token_type+' '+response.data.access_token;
+                    console.log('entra');
+                    this.$root.auth = true;
+                    this.$router.push({ path: '/' });
+                  })
+                    // .catch(error => {
+                    //     this.errors = error.response.data;
+                    //         if (this.errors.errors.email) {
+                    //             this.Swal(this.errors.errors.email[0], 'error');
+                    //         }
+                    //         if (this.errors.errors.password) {
+                    //             this.Swal(this.errors.errors.password[0], 'error');
+                    //         }
+                    //     console.log(error)
+                    //     })
+
+
+            },
   },
 }
 </script>
