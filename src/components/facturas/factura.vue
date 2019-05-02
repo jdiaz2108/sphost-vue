@@ -50,13 +50,13 @@
                                 <div :class="htmls.labels"><label for="nombre" class="form-control-label">Fecha
                                         actual:</label></div>
                                 <div :class="htmls.inputs">
-                                    <v-dialog ref="dialog" v-model="modalDate" :return-value.sync="date" persistent lazy
+                                    <v-dialog   :disabled="disabled" ref="dialog" v-model="modalDate" :return-value.sync="date" persistent lazy
                                         full-width dark width="290px" locale="es">
                                         <template v-slot:activator="{ on }">
                                             <v-text-field v-model="date" prepend-icon="event" readonly v-on="on">
                                             </v-text-field>
                                         </template>
-                                        <v-date-picker v-model="date" scrollable>
+                                        <v-date-picker v-model="date" scrollable >
                                             <v-spacer></v-spacer>
                                             <v-btn flat color="primary" @click="modalDate = false">Cancel</v-btn>
                                             <v-btn flat color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
@@ -86,7 +86,7 @@
 
                                 <div :class="htmls.labels"><label class=" form-control-label">Nit o CC.</label></div>
                                 <div :class="htmls.inputs">
-                                    <v-radio-group v-model="cliente.ide" row>
+                                    <v-radio-group v-model="cliente.ide" row   :disabled="disabled">
                                         <v-radio label="Nit" :value="0"></v-radio>
                                         <v-radio label="CC" :value="1"></v-radio>
                                     </v-radio-group>
@@ -116,12 +116,6 @@
                                 <div :class="htmls.inputs">
                                     <input type="text" v-model="cliente.encargado" class="form-control"  :disabled="disabled" >
                                 </div>
-
-                                <div class="py-2 col-3 col-md-3"></div>
-                                <div class="py-2 col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                                    <button v-if="newProducto.length > 0" type="submit"
-                                        class="btn btn-lg btn-success">Crear</button>
-                                </div>
                             </div>
 
                             <div class="row p-3">
@@ -140,19 +134,19 @@
                                         <tr v-for="nowpro, key in newProducto">
                                             <input type="hidden" :name="nowpro.id_producto" :value="nowpro">
                                             <td><button class="btn btn-sm btn-danger btn-xs prod-'+productos[i].id+'"
-                                                    type="button" @click="delProducto(key)"><i
+                                                    type="button" @click="delProducto(key)"   :disabled="disabled"><i
                                                         class="fa fa-trash-o"></i></button></td>
-                                            <td><input class="form-control" v-model.number="nowpro.nombre"></td>
+                                            <td><input class="form-control" v-model.number="nowpro.nombre"   :disabled="disabled"></td>
                                             <td><input type="number" class="form-control" size="5"
                                                     v-model.number="nowpro.qty"
-                                                    @change="nowpro.total = nowpro.valor * nowpro.qty; totals()"></td>
+                                                    @change="nowpro.total = nowpro.valor * nowpro.qty; totals()"   :disabled="disabled"></td>
                                             <td>
                                                 <div class="form-group">
                                                     <textarea class="form-control" v-model="nowpro.descripcion" rows="5"
-                                                        id="comment"></textarea>
+                                                        id="comment"   :disabled="disabled"></textarea>
                                                 </div>
                                             </td>
-                                            <td><input type="number" class="form-control" v-model.number="nowpro.valor"
+                                            <td><input type="number" class="form-control" v-model.number="nowpro.valor"   :disabled="disabled"
                                                     @change="nowpro.total = nowpro.valor * nowpro.qty; totals()">
                                             </td>
                                             <td><span>{{formatPrice(nowpro.total)}}</span></td>
@@ -161,7 +155,7 @@
                                         <tr>
                                             <td>
                                                 <button type="button" class="btn btn-success btn-sm"
-                                                    @click="dialogProductos = true" data-toggle="modal"
+                                                    @click="dialogProductos = true" data-toggle="modal"   :disabled="disabled"
                                                     data-target=".bd-example-modal-lg">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
@@ -207,167 +201,147 @@
 </template>
 
 <script>
-import ListClientes from './../clientes/listCliente'
-import ListProducts from './../products/listProducts'
-    import axios from 'axios'
-    export default {
-      components: {
-    ListClientes,
-    ListProducts
-  },
-      created() {
-
+  import ListClientes from './../clientes/listCliente'
+  import ListProducts from './../products/listProducts'
+  import axios from 'axios'
+  export default {
+    components: {
+      ListClientes,
+      ListProducts
+    },
+    created() {
+    },
+    mounted() {
+      if (this.$route.meta.crudStatus == 'show') {
+        this.title = 'Ver cuenta';
+        this.getFactura();
+      } else {
+        this.title = 'Crear cuenta';
+        this.disabled = false;
+      }
+    },
+    data() {
+      return {
+        products: [],
+        title: 'crear cuenta',
+        rows: [10, 20, 50, {
+          "text": "$vuetify.dataIterator.rowsPerPageAll",
+          "value": -1
+        }],
+        disabled: true,
+        search: '',
+        subtotal: 0,
+        total: 0,
+        impuesto: 0,
+        descuento: 0,
+        dialogClientes: false,
+        dialogProductos: false,
+        cliente: {},
+        clientes: null,
+        modalDate: false,
+        date: new Date().toISOString().substr(0, 10),
+        newProducto: [],
+        htmls: {
+          labels: {
+            'py-2': true,
+            'col-3': true,
+            'col-md-2': true,
+          },
+          inputs: {
+            'py-2': true,
+            'col-9': true,
+            'col-md-4': true,
+          }
+        },
+      }
+    },
+    methods: {
+      getFactura: function () {
+        axios
+          .get('/factura/' + this.$route.params.slug)
+          .then(response => {
+            this.cliente = response.data.data,
+            this.newProducto = response.data.data.productos
+          })
+          .catch(error => {
+            console.log(error)
+          })
       },
-        mounted() {
-          this.getAllProducts();
-            if (this.$route.meta.crudStatus == 'show') {
-                 this.title = 'Ver cuenta';
-                this.getFactura();
-            } else {
-                this.title = 'Crear cuenta';
-                this.cliente.ide = 0;
-                this.disabled = false;
-            }
-        },
-        data() {
-            return {
-              products: [],
-                title: 'crear cuenta',
-                rows: [10, 20, 50, {
-                    "text": "$vuetify.dataIterator.rowsPerPageAll",
-                    "value": -1
-                }],
-                disabled: true,
-                search: '',
-                subtotal: 0,
-                total: 0,
-                impuesto: 0,
-                descuento: 0,
-                dialogClientes: false,
-                dialogProductos: false,
-                cliente: {},
-                clientes: null,
-                modalDate: false,
-                date: new Date().toISOString().substr(0, 10),
-                newProducto: [],
-                htmls: {
-                    labels: {
-                        'py-2': true,
-                        'col-3': true,
-                        'col-md-2': true,
-                    },
-                    inputs: {
-                        'py-2': true,
-                        'col-9': true,
-                        'col-md-4': true,
-                    }
-                },
-            }
-        },
-        methods: {
-            getFactura: function () {
-                axios
-                    .get('/facturas/'+this.$route.params.slug)
-                    .then(response => {
-                        this.cliente = response.data.data
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            },
-            formatPrice: function (value) {
-                let val = (value / 1).toFixed(0).replace('.', ',');
-                return '$ ' + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            },
-            getAllClientes: function (id) {
-                axios({
-                        method: 'get',
-                        url: '/api/clientes',
-                    })
-                    .then(response => (this.clientes = response.data.data))
-                    .catch(function (err) {
-                        console.log(err)
-                    })
-            },
-            getAllProducts: function () {
-                axios({
-                        method: 'get',
-                        url: '/products',
-                    })
-                    .then(response => (this.products = response.data.data))
-                    .catch(function (err) {
-                        console.log(err)
-                    })
-            },
-            formSend: function () {
-                if ($.isEmptyObject(this.cliente)) {
-                    this.alertSwal('error', 'Es necesario seleccionar un cliente');
-                } else if (this.newProducto.length <= 0) {
-                    this.alertSwal('error', 'Es necesario agregar un producto');
-                } else {
-                    this.cliente.date = this.date;
-                    this.cliente.newProducto = this.newProducto;
-                    axios({
-                            method: 'post',
-                            url: '/api/factura/c/'+this.cliente.slug,
-                            data: this.cliente,
-                        })
-                        .then(function (res) {
-                            console.log(res)
-                            this.alertSwal('success', 'Se ha generado una nueva factura');
-                            setTimeout(window.location = "/factura/"+ response.data , 2000);
-                            //window.location = "/factura/"+ res.data.message
-                        })
-                        .catch(function (err) {
-                            console.log(err)
-                        })
-                }
-            },
-            clienteSeleccionado: function (params) {
-                this.cliente = params;
-                this.dialogClientes = false;
-            },
-            addProducto: function (params) {
-                console.log(params);
-                 this.dialogProductos = false;
-                 this.newProducto.push({
-                     producto_id: params.id,
-                     nombre: params.nombre,
-                     valor: params.valor,
-                     descripcion: params.descripcion,
-                     qty: params.qty,
-                     total: params.valor,
-                 });
-                 this.totals();
-                 alert(JSON.stringify(this.productos[params.id]));
-            },
-            delProducto: function (id) {
-                this.newProducto.splice(id, 1);
-            },
-            totals: function () {
-                var s = 0;
-                for (var i = 0; i < this.newProducto.length; i++) {
-                    s = s + parseInt(this.newProducto[i].total)
-                }
-                this.subtotal = s;
-            },
-            alertSwal: function (title, alert) {
-                Swal({
-                    title: alert,
-                    type: title,
-                    confirmButtonText: 'Ok'
-                })
-            }
-        },
-        computed: {
-              productoObjetos: function () {
-                  for (var i = 0; i < this.products.length; i++) {
-                      this.products[i].total = this.products[i].valor
-                  }
-                  return this.products
-              }
+      formatPrice: function (value) {
+        let val = (value / 1).toFixed(0).replace('.', ',');
+        return '$ ' + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      },
+      formSend: function () {
+        console.log(Object.keys(this.cliente).length);
+        if (Object.keys(this.cliente).length == 0) {
+          this.alertSwal('error', 'Es necesario seleccionar un cliente');
+        } else if (this.newProducto.length <= 0) {
+          this.alertSwal('error', 'Es necesario agregar un producto');
+        } else {
+          this.cliente.date = this.date;
+          this.cliente.newProducto = this.newProducto;
+          axios({
+              method: 'post',
+              url: '/factura',
+              data: this.cliente,
+            })
+            .then(function (res) {
+              console.log(res)
+              this.alertSwal('success', 'Se ha generado una nueva factura');
+              setTimeout(window.location = "/factura/" + response.data, 2000);
+              //window.location = "/factura/"+ res.data.message
+            })
+            .catch(function (err) {
+              console.log(err)
+            })
         }
+      },
+      clienteSeleccionado: function (params) {
+        this.cliente = params;
+        this.dialogClientes = false;
+      },
+      addProducto: function (params) {
+        this.dialogProductos = false;
+        this.newProducto.push({
+          producto_id: params.id,
+          nombre: params.nombre,
+          valor: params.valor,
+          descripcion: params.descripcion,
+          qty: params.qty,
+          total: params.valor,
+        });
+        this.totals();
+      },
+      delProducto: function (id) {
+        this.newProducto.splice(id, 1);
+      },
+      totals: function () {
+        var s = 0;
+        for (var i = 0; i < this.newProducto.length; i++) {
+          s = s + parseInt(this.newProducto[i].total)
+        }
+        this.subtotal = s;
+      },
+      alertSwal(type, title){
+          // Use sweetalert2
+          this.$swal({
+                  title: title,
+                  type: type,
+                  confirmButtonText: 'Aceptar',
+                  showConfirmButton: false,
+                  timer: 2000
+              });
+      },
+    },
+    computed: {
+      productoObjetos: function () {
+        for (var i = 0; i < this.products.length; i++) {
+          this.products[i].total = this.products[i].valor
+        }
+        return this.products
+      }
     }
+  }
 </script>
 
 <style>

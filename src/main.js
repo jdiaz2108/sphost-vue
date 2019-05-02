@@ -16,7 +16,7 @@ Vue.use(Vuetify)
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !localStorage.Authorization) {
+  if (to.meta.requiresAuth && this.user == null && !localStorage.Authorization) {
     next('/login');
   } else {
     next();
@@ -36,7 +36,9 @@ new Vue({
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
     if (localStorage.Authorization) {
-      this.auth = true
+      if (!this.user) {
+        axios.get('/auth/user').then(response => { this.user = response.data; this.auth = true}).catch(error => {localStorage.removeItem('Authorization')});
+      }
     }
   },
   data () {
@@ -44,7 +46,8 @@ new Vue({
       auth: false,
       linkLogo: 'http://localhost:8000/images/logointranet.jpg',
       drawer: true,
-      isLoad: false
+      isLoad: false,
+      user: null
     }
   }
 })

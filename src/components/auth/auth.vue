@@ -1,75 +1,37 @@
 <template>
-  <div class="container-fluid auth">
+  <div class="container-fluid auth d-flex">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card mt-25 border-secondary">
-                <div class="card-header aqua-gradient text-center">
-                    <img src="http://localhost:8000/images/logointranet.jpg" class="card-img-top shadow rounded flotting-45 mb-2 border-secondary border" alt="Card image cap">
-                </div>
-
-                <div class="card-body">
-                    <form method="POST" action="" @submit.prevent="doLogin()">
-
-                        <div class="form-group row">
-                            <label for="email" class="col-sm-4 col-form-label text-md-right">Correo:</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="email" v-model="email" required autofocus>
-<!-- {{ $errors->has('email') ? ' is-invalid' : '' }} -->
-                                <!-- @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif -->
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Contraseña:</label>
-
-                            <div class="col-md-6">
-                                <input v-model="password" id="password" type="password" class="form-control" name="password" required>
-
-                                <!-- @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif -->
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
-
-                                    <label class="form-check-label" for="remember">
-                                       Recordar
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <!-- @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif -->
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+      <div class="col-12 col-md-7 col-lg-5 col-xl-3 align-self-center" style="position: relative;bottom: 5rem;">
+        <div class="card mt-25 border-secondary">
+          <div class="card-header aqua-gradient text-center"><img
+              src="http://solopendones.host/assets/images/logointranet.jpg" alt="Card image cap"
+              class="card-img-top shadow rounded flotting-45 mb-2 border-secondary border"></div>
+          <div class="card-body">
+            <form @submit.prevent="doLogin()">
+              <div class="input-group mb-3"><input name="email" v-model="email" type="email"
+                  placeholder="Correo electrónico" aria-describedby="basic-addon2" required="required"
+                  autofocus="autofocus" class="form-control">
+                <div class="input-group-append"><span id="basic-addon2" class="input-group-text" style="width: 34px;"><i
+                      aria-hidden="true" class="fa fa-envelope"></i></span></div>
+              </div>
+              <div class="input-group mb-3"><input name="password" v-model="password" type="password"
+                  placeholder="Contraseña" aria-describedby="basic-addon2" required="required" autofocus="autofocus"
+                  class="form-control">
+                <div class="input-group-append"><span id="basic-addon2" class="input-group-text" style="width: 34px;"><i
+                      aria-hidden="true" class="fa fa-lock"></i></span></div>
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-checkbox mb-3"><input type="checkbox" id="customCheck1"
+                    class="custom-control-input"> <label for="customCheck1"
+                    class="custom-control-label">Recordarme</label></div> <button type="submit"
+                  class="btn btn-primary">Iniciar Sesión</button>
+              </div>
+            </form>
+          </div>
         </div>
-
+      </div>
     </div>
-</div>
+  </div>
 </template>
 <script>
     import axios from 'axios'
@@ -79,7 +41,7 @@ export default {
 email: null,
 password: null,
       key: 'value',
-      errors: []
+      errors: [],
     }
   },
   methods: {
@@ -89,9 +51,10 @@ password: null,
                     password: this.password
                   })
                   .then(response => {
-                    localStorage.Authorization = response.data.token_type+' '+response.data.access_token;
-                    console.log('entra');
+                    localStorage.Authorization = 'Bearer '+response.data.access_token;
+                    axios.defaults.headers.common['Authorization'] = localStorage.Authorization;
                     this.$root.auth = true;
+                    axios.get('/auth/user').then(response => { this.$root.user = response.data})
                     this.$router.push({ path: '/' });
                   })
                     // .catch(error => {
@@ -112,13 +75,19 @@ password: null,
 </script>
 
 <style>
-.auth {
+.auth:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.7);
+}
 
+.auth {
     min-height: 100vh;
-    background-image: url(http://localhost:8000/images/bgfondo.jpg);
-    height: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: url(http://solopendones.host/assets/images/bgfondo.jpg) 50%/cover no-repeat fixed;
+    position: relative;
 }
 </style>

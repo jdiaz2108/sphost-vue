@@ -14,7 +14,7 @@
         <td class="text-xs-left">{{ props.item.direccion }}</td>
         <td class="text-xs-left">{{ props.item.ciudad }}</td>
         <td>
-          <router-link class="router-links" :to="'/cliente/'+props.item.slug">
+          <router-link class="router-links" :to="'/facturas/'+props.item.id">
             <button class="btn btn-primary">Ver</button>
           </router-link>
         </td>

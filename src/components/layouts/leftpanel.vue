@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer class="menu" v-model="$root.$data.drawer" fixed clipped dark app>
+  <v-navigation-drawer style="background-color: initial !important" fixed clipped app v-model="$root.$data.drawer">
     <v-list dense>
       <v-list-tile avatar tag="div" v-if="$vuetify.breakpoint.mdAndDown">
         <v-toolbar-side-icon @click.stop="$root.$data.drawer = !$root.$data.drawer"></v-toolbar-side-icon>
@@ -129,30 +129,30 @@ export default {
 
   }
 
-  .v-navigation-drawer .v-list,
-  .theme--light.v-list {
+  .v-navigation-drawero .v-listo,
+  .theme--lighto.v-listo {
     background: none;
   }
 
-  .v-list__group__header--active {
+  .v-list__group__header--activeo {
     background-color: rgba(151, 153, 162, 0.4);
     border-radius: 0 0 20px 20px;
     box-shadow: 0px 0px 2px #000000;
   }
 
-  .v-list__group__header--active .v-list__group__header__prepend-icon .v-icon,
+  .v-list__group__header--activeo .v-list__group__header__prepend-icono .v-icono,
  {
     color: #ffffff;
   }
 
-  .router-links {
+  .router-linkso {
     color: #ffffff;
     text-decoration: none;
   }
-  .router-link-exact-active {
+  .router-link-exact-activeo {
     color: #ffffff;
   }
-  .router-link-active {
+  .router-link-activeo {
     background-color: #f00;
         color: burlywood;
   }
