@@ -5,8 +5,9 @@
       <v-spacer></v-spacer>
       <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
     </v-card-title>
-    <v-data-table  :headers="headers" :items="facturas" :search="search" :rows-per-page-items="rows" class="elevation-1" light>
+    <v-data-table  :headers="headers" :items="facturas" :search="search" :rows-per-page-items="rows" class="elevation-1" :pagination.sync="pagination" light>
       <template v-slot:items="props">
+        <td class="text-xs-left">{{ props.item.created_at }}</td>
         <td class="text-xs-left">{{ props.item.nombre }}</td>
         <td class="text-xs-left">{{ props.item.nit }}</td>
         <td class="text-xs-left">{{ props.item.correo }}</td>
@@ -52,12 +53,19 @@
     data() {
       return {
         facturas: [],
+                pagination: {
+          sortBy: 'created_at',
+          descending: true
+        },
         search: '',
         headers: [{
-            text: 'Nombre Cliente',
+          text: 'Fecha',
+          value: 'created_at'
+        },
+        {
+          text: 'Nombre Cliente',
             align: 'left',
             value: 'nombre',
-            sortable: false
           },
           {
             text: 'Identificación',
