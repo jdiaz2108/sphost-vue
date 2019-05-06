@@ -26,7 +26,9 @@ export default new Router({
     },
     {
       path: '/login',
-      component: logComponent
+      name: 'login',
+      component: logComponent,
+      meta: { requiresVisitor: true }
     },
     {
       path: '/cliente',

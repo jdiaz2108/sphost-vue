@@ -1,10 +1,11 @@
 <template>
-    <div class="card mt-25">
-        <div class="card-header">
-                <div class="card-body moon-gradient flotting-45 shadow float-none">
-                    <h3 class="m-0 text-center text-uppercase text-light">{{title}}</h3>
-                </div>
-        </div>
+    <div class="card  card-cascade narrower">
+                 <div class="view view-cascade gradient-card-header moon-gradient text-white mb-3">
+
+            <!-- Title -->
+            <h2 class="card-header-title my-1">{{title}}</h2>
+
+          </div>
         <div class="card-body">
             <div class="row form-group d-flex align-center">
                 <div :class="htmls.labels"><label for="nombre" class="form-control-label">Nombre del

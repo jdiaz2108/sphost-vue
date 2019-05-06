@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12">
+    <div>
         <!-- dialogo para seleccionar cliente -->
         <v-dialog v-model="dialogClientes" scrollable>
             <v-card>
@@ -23,15 +23,14 @@
             </v-card>
         </v-dialog>
         <!-- inicio form -->
-        <form @submit.prevent="formSend" method="POST" class="col-12 form-group">
-            <div class="container-fluid">
-                <div class="col-lg-12">
-                    <div class="card card mt-25">
-                        <div class="card-header">
-                            <div class="card-body moon-gradient flotting-45 shadow float-none">
-                                <h3 class="m-0 text-center text-uppercase text-light">{{title}}</h3>
-                            </div>
-                        </div>
+        <form @submit.prevent="formSend" method="POST" class="form-group">
+                    <div class="card  card-cascade narrower">
+                                         <div class="view view-cascade gradient-card-header moon-gradient text-white mb-3" style="cursor: default">
+
+            <!-- Title -->
+            <h2 class="card-header-title my-1">{{title}}</h2>
+
+          </div>
                         <div class="card-header">
                             <v-btn color="primary" dark @click="dialogClientes = true"><i
                                     class="fa fa-search mr-3"></i> Buscar Cliente</v-btn>
@@ -193,8 +192,6 @@
                         </div>
 
                     </div>
-                </div>
-            </div>
         </form>
 
     </div>

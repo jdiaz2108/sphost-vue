@@ -19,6 +19,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && this.user == null && !localStorage.Authorization) {
     next('/login');
   } else {
+    if (to.name == 'login' && this.user == !null) {
+      next('/');
+    }
     next();
   }
   // ...
