@@ -34,12 +34,44 @@
 
 <script>
   import axios from 'axios'
+  import Pusher from 'pusher-js'
   export default {
     props: ['selectList'],
     created() {
       this.getAllClientes();
+      this.subscribe();
+    },
+    mounted() {
     },
     methods: {
+      subscribe () {
+    let pusher = new Pusher('d274ae81d8186b0c3d42', {
+      authEndpoint: 'http://localhost:8000/broadcasting/auth',
+      auth: {
+        headers: {
+          'Authorization': localStorage.Authorization,
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      },
+         cluster: 'us2',
+         forceTLS: true
+       });
+      pusher.subscribe('private-client')
+      pusher.bind('SendEvent', data => {
+
+        this.clientes.push(data.cliente)
+                    this.$swal({
+                      toast: true,
+                    title: 'usuario creado',
+                    type: 'success',
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    timer: 10000
+                });
+
+      })
+    }, 
       onClickButton: function (event) {
       this.$emit('onClickButton', event);
     },
@@ -98,3 +130,17 @@
     }
   }
 </script>
+
+
+<style>
+  .swal2-success-circular-line-left,
+  .swal2-success-circular-line-right,
+  .swal2-success-fix,
+  .swal2-popup {
+    background-color: #404040;
+  }
+
+  .swal2-title {
+    color: #ffffff !important;
+  }
+</style>
