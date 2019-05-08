@@ -34,7 +34,7 @@
 
 <script>
   import axios from 'axios'
-  import Pusher from 'pusher-js'
+  
   export default {
     props: ['selectList'],
     created() {
@@ -45,23 +45,11 @@
     },
     methods: {
       subscribe () {
-    let pusher = new Pusher('d274ae81d8186b0c3d42', {
-      authEndpoint: 'http://localhost:8000/broadcasting/auth',
-      auth: {
-        headers: {
-          'Authorization': localStorage.Authorization,
-          'X-Requested-With': 'XMLHttpRequest',
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      },
-         cluster: 'us2',
-         forceTLS: true
-       });
-      pusher.subscribe('private-client')
-      pusher.bind('SendEvent', data => {
-
-        this.clientes.push(data.cliente)
-                    this.$swal({
+        Echo.channel('private-client')
+        .listen('.SendEvent', (e) => {
+            console.log(e);
+                this.clientes.push(e.cliente)
+                this.$swal({
                       toast: true,
                     title: 'usuario creado',
                     type: 'success',
@@ -69,8 +57,7 @@
                     position: 'top-end',
                     timer: 10000
                 });
-
-      })
+        });
     }, 
       onClickButton: function (event) {
       this.$emit('onClickButton', event);

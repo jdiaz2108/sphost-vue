@@ -12,6 +12,24 @@ Vue.use(VueSweetalert2);
 Vue.use(axios)
 Vue.use(Vuetify)
 
+ import Echo from 'laravel-echo'
+
+ window.Pusher = require('pusher-js');
+
+ window.Echo = new Echo({
+   broadcaster: 'pusher',
+   key: 'd274ae81d8186b0c3d42',
+   cluster: 'us2',
+   encrypted: false,
+   authEndpoint: 'http://localhost:8000/broadcasting/auth',
+    auth: {
+      headers: {
+        'Authorization': localStorage.Authorization,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }
+ });
 
 Vue.config.productionTip = false
 
@@ -50,7 +68,28 @@ new Vue({
       linkLogo: 'http://localhost:8000/images/logointranet.jpg',
       drawer: true,
       isLoad: false,
-      user: null
+      user: null,
+      usersNumber: null,
+      allUsers: []
     }
-  }
+  },
+  mounted() {
+    window.Echo.join('client')
+    .here((users) => {
+      this.usersNumber = users.length;
+      this.allUsers = users;
+        console.log(users);
+    })
+    .joining((user) => {
+      this.usersNumber += 1;
+        console.log(user.name);
+        this.allUsers.push(user)
+    })
+    .leaving((user) => {
+      this.usersNumber -= 1;
+      let i = this.allUsers.map(item => item.id).indexOf(user.id) // find index of your object
+      this.allUsers.splice(i, 1)
+        console.log(user.name);
+    });
+  },
 })
