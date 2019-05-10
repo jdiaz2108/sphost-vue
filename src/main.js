@@ -21,7 +21,7 @@ Vue.use(Vuetify)
    key: 'd274ae81d8186b0c3d42',
    cluster: 'us2',
    encrypted: false,
-   authEndpoint: 'http://localhost:8000/broadcasting/auth',
+   authEndpoint: backend+'broadcasting/auth',
     auth: {
       headers: {
         'Authorization': localStorage.Authorization,
@@ -55,7 +55,7 @@ new Vue({
   components: { App },
   template: '<App/>',
   created () {
-    axios.defaults.baseURL = 'http://localhost:8000/api'
+    axios.defaults.baseURL = backend+'api'
     axios.defaults.headers.common['Authorization'] = localStorage.Authorization
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -67,8 +67,10 @@ new Vue({
   },
   data () {
     return {
+      backend: 'http://backend.solopendones.host/',
+      host: 'http://localhost:8000/',
       auth: false,
-      linkLogo: 'http://localhost:8000/images/logointranet.jpg',
+      linkLogo: backend+'images/logointranet.jpg',
       drawer: true,
       isLoad: false,
       user: null,
