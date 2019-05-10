@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <v-app v-if="$root.$data.auth">
-      <topbar></topbar>
       <leftPanel></leftPanel>
+      <topbar></topbar>
       <v-content class="m-4">
         <v-layout justify-center align-center column>
           <div class="row w-100">

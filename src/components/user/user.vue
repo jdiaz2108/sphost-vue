@@ -8,49 +8,44 @@
           </div>
         <div class="card-body">
             <div class="row form-group d-flex align-center">
-                <div :class="htmls.labels"><label for="nombre" class="form-control-label">Nombre del
-                        Cliente:</label></div>
+                <div :class="htmls.labels"><label for="name" class="form-control-label">Nombre del
+                        Usuario:</label></div>
                 <div :class="htmls.inputs">
-                    <input type="text" id="nombre" v-model="cliente.nombre" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.nombre? true : false}">
-                    <div v-if="errors.nombre" class="invalid-feedback">{{errors.nombre}}</div>
+                    <input type="text" id="name" v-model="object.name" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.name? true : false}">
+                    <div v-if="errors.name" class="invalid-feedback">{{errors.name}}</div>
                 </div>
                 <div :class="htmls.labels"><label for="mail" class="form-control-label">Correo
                         Electrónico.</label></div>
                 <div :class="htmls.inputs">
-                    <input type="text" id="mail" v-model="cliente.correo" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.correo? true : false}">
-                    <div v-if="errors.correo" class="invalid-feedback">{{errors.correo}}</div>
+                    <input type="email" id="mail" v-model="object.email" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.email? true : false}">
+                    <div v-if="errors.email" class="invalid-feedback">{{errors.email}}</div>
                 </div>
                 <div :class="htmls.labels">
-                    <label for="nit" class="form-control-label">Numero Identificador:</label></div>
+                    <label for="document" class="form-control-label">Documento:</label></div>
                 <div :class="htmls.inputs">
-                    <input type="text" id="nit" v-model="cliente.nit" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.nit? true : false}">
-                    <div v-if="errors.nit" class="invalid-feedback">{{errors.nit}}</div>
-                </div>
-                <div :class="htmls.labels"><label class=" form-control-label">Nit o CC.</label></div>
-                <div :class="htmls.inputs">
-                    <v-radio-group v-model="cliente.ide" row :disabled="disabled">
-                        <v-radio label="Nit" :value="0"></v-radio>
-                        <v-radio label="CC" :value="1"></v-radio>
-                    </v-radio-group>
-                </div>
-                <div :class="htmls.labels"><label for="telefono" class="form-control-label">Telefono -
-                        Celular:</label></div>
-                <div :class="htmls.inputs">
-                    <input type="text" id="telefono" v-model="cliente.telefono" :disabled="disabled" class="form-control">
+                    <input type="text" id="document" v-model="object.document" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.document? true : false}">
+                    <div v-if="errors.document" class="invalid-feedback">{{errors.document}}</div>
                 </div>
                 <div :class="htmls.labels">
-                    <label for="direccion" class="form-control-label">Dirección:</label></div>
+                    <label for="image" class="form-control-label">Imagen:</label></div>
                 <div :class="htmls.inputs">
-                    <input type="text" id="direccion" v-model="cliente.direccion" :disabled="disabled" class="form-control">
+                    <input type="text" id="image" v-model="object.image" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.image? true : false}">
+                    <div v-if="errors.image" class="invalid-feedback">{{errors.image}}</div>
                 </div>
-                <div :class="htmls.labels"><label for="ciudad" class="form-control-label">Ciudad:</label></div>
+                <template v-if="this.$route.meta.crudStatus == 'show'">
+                <div :class="htmls.labels">
+                    <label for="password" class="form-control-label">Contraseña:</label></div>
                 <div :class="htmls.inputs">
-                    <input type="text" id="ciudad" v-model="cliente.ciudad" :disabled="disabled" class="form-control">
+                    <input type="password" id="password" v-model="object.password" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.password? true : false}">
+                    <div v-if="errors.password" class="invalid-feedback">{{errors.password}}</div>
                 </div>
-                <div :class="htmls.labels"><label for="encargado" class="form-control-label">Encargado:</label></div>
+                <div :class="htmls.labels">
+                    <label for="password-confirmation" class="form-control-label">Repetir Contraseña:</label></div>
                 <div :class="htmls.inputs">
-                    <input type="text" v-model="cliente.encargado" :disabled="disabled" class="form-control">
+                    <input type="password" id="password-confirmation" v-model="object.password_confirmation" :disabled="disabled" :class="{'form-control': true, 'is-invalid': errors.password_confirmation? true : false}">
+                    <div v-if="errors.password_confirmation" class="invalid-feedback">{{errors.password_confirmation}}</div>
                 </div>
+                </template>
             </div>
 
             <div class="dropdown-divider"></div>
@@ -61,12 +56,12 @@
                 </div>
                 <div v-if="disabled == false">
                     <a role="button" @click="disabled = true; title = 'Ver cliente'" class="btn btn-danger btn-lg float-right text-white mx-1">Cancelar</a>
-                    <a role="button" @click="updateCliente()" class="btn btn-warning btn-lg float-right mx-1">Guardar</a>
+                    <a role="button" @click="updateObject()" class="btn btn-warning btn-lg float-right mx-1">Guardar</a>
                 </div>
             </div>
             <div v-else>
                 <div>
-                    <a role="button" @click="createCliente()" class="btn btn-success btn-lg text-light float-right">
+                    <a role="button" @click="createObject()" class="btn btn-success btn-lg text-light float-right">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Crear</a>
                 </div>
             </div>
@@ -84,19 +79,19 @@
         },
         mounted() {
             if (this.$route.meta.crudStatus == 'show') {
-                 this.title = 'Ver Cliente';
-                 this.getCliente();
-                       console.log('montado show');
+                 this.title = this.titleSee;
+                 this.getObject();
             } else {
-                this.title = 'Crear Cliente';
-                this.cliente.ide = 0;
+                this.title = this.title;
+                this.object.ide = 0;
                 this.disabled = false;
-                      console.log('montado create');
             }
         },
         data() {
             return {
-                title: 'Cliente',
+                titleSee: 'Ver Usuario',
+                titleEdit: 'Editar Usuario',
+                title: 'Crear Usuario',
                 disabled: true,
                 htmls: {
                     labels: {
@@ -110,7 +105,7 @@
                         'col-md-4': true,
                     }
                 },
-                cliente: {},
+                object: {},
                 status: 'ver',
                 getDepend: null,
                 errors: [],
@@ -128,25 +123,25 @@
                     timer: 2000
                 });
         },
-            getCliente: function () {
+            getObject: function () {
                 axios
-                    .get('/clientes/'+this.$route.params.slug)
+                    .get('/users/'+this.$route.params.slug)
                     .then(response => {
-                        this.cliente = response.data.data
+                        this.object = response.data.data
                     })
                     .catch(error => {
                         console.log(error)
                     })
             },
-            updateCliente: function () {
+            updateObject: function () {
                 axios({
                         method: 'put',
-                        url: '/clientes/'+this.$route.params.slug,
-                        data: this.cliente,
+                        url: '/users/'+this.$route.params.slug,
+                        data: this.object,
                     })
                     .then(response => {
                         this.disabled = true;
-                        this.title = 'Ver cliente';
+                        this.title = 'Ver Usuario';
                         this.alertSwal('success', 'Se han Guardado los cambios');
                         this.errors = [];
                     })
@@ -155,20 +150,20 @@
                         console.log(error)
                     })
             },
-            createCliente: function () {
+            createObject: function () {
                     axios({
                             method: 'post',
-                            url: '/clientes',
-                            data: this.cliente,
+                            url: '/auth/register',
+                            data: this.object,
                         })
                         .then(response => {
-                            this.title = 'Editar Cliente';
+                            this.title = 'Editar Usuario';
                             this.crudstatus = 'show';
                             this.disabled = true;
-                            this.cliente.slug = response.data;
+                            this.object.slug = response.data;
                             // console.log(response.data);
-                            this.alertSwal('success', 'Se ha creado nuevo Cliente');
-                            this.$router.push({ path: '/cliente/'+this.cliente.slug });
+                            this.alertSwal('success', 'Se ha creado nuevo Usuario');
+                            this.$router.push({ path: '/user/'+this.object.slug });
                         })
                         .catch(error => {
                             this.errors = error.response.data.errors;

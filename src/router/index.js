@@ -8,6 +8,8 @@ import Factura from '@/components/facturas/Factura'
 import ListFactura from '@/components/facturas/listFactura'
 import Products from '@/components/products/products'
 import ListProducts from '@/components/products/listProducts'
+import User from '@/components/user/user'
+import ListUser from '@/components/user/listUser'
 
 Vue.use(Router)
 
@@ -73,6 +75,21 @@ export default new Router({
     {
       path: '/productos/:slug',
       component: Products,
+      meta: {crudStatus: 'show', requiresAuth: true}
+    },
+    {
+      path: '/user',
+      component: ListUser,
+      meta: {requiresAuth: true}
+    },
+    {
+      path: '/user/create',
+      component: User,
+      meta: {crudStatus: 'create', requiresAuth: true}
+    },
+    {
+      path: '/user/:slug',
+      component: User,
       meta: {crudStatus: 'show', requiresAuth: true}
     }
   ],

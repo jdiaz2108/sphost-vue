@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer style="background-color: initial !important" fixed clipped app v-model="$root.$data.drawer">
+  <v-navigation-drawer fixed clipped app v-model="$root.$data.drawer">
     <v-list dense>
       <v-list-tile avatar tag="div" v-if="$vuetify.breakpoint.mdAndDown">
         <v-toolbar-side-icon @click.stop="$root.$data.drawer = !$root.$data.drawer"></v-toolbar-side-icon>
@@ -97,6 +97,19 @@ export default {
           {
             title: 'Crear Producto',
             action: '/productos/create'
+          }
+        ]
+      },
+      {
+        action: 'archive',
+        title: 'Usuarios',
+        items: [{
+            title: 'Listar Usuarios',
+            action: '/user'
+          },
+          {
+            title: 'Crear Usuario',
+            action: '/user/create'
           }
         ]
       }

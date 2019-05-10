@@ -34,13 +34,16 @@ Vue.use(Vuetify)
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && this.user == null && !localStorage.Authorization) {
+  if (to.meta.requiresAuth && !localStorage.Authorization) {
     next('/login');
   } else {
-    if (to.name == 'login' && this.user == !null) {
+    console.log(to.name);
+    console.log();
+    if (to.name == 'login' && localStorage.Authorization) {
       next('/');
+    } else {
+      next();
     }
-    next();
   }
   // ...
 })
@@ -58,7 +61,7 @@ new Vue({
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
     if (localStorage.Authorization) {
       if (!this.user) {
-        axios.get('/auth/user').then(response => { this.user = response.data; this.auth = true}).catch(error => {localStorage.removeItem('Authorization')});
+        axios.get('/auth/user').then(response => { this.user = response.data; this.auth = true}).catch(error => {localStorage.removeItem('Authorization'); this.$router.push({ path: '/login' });});
       }
     }
   },
