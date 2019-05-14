@@ -43,7 +43,7 @@
                                         class="form-control-label text-danger font-weight-bold">Numero cuenta:</label>
                                 </div>
                                 <div :class="htmls.inputs">
-                                    <input type="text" id="numero" v-model="cliente.nombre" class="form-control"  :disabled="disabled">
+                                    <input type="text" id="numero" v-model="facturaNum" class="form-control"  disabled="disabled">
                                 </div>
 
                                 <div :class="htmls.labels"><label for="nombre" class="form-control-label">Fecha
@@ -117,7 +117,7 @@
                                 </div>
                             </div>
 
-                            <div class="row p-3">
+                            <div class="row p-3 table-responsive">
                                 <table id="datatable-fixed-header" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -185,7 +185,7 @@
                                 </table>
                             </div>
                             <div class="dropdown-divider"></div>
-                            <button type="button" @click="formSend()" class="btn btn-danger">Enviar</button>
+                            <button type="button" @click="formSend()" class="btn btn-danger">Crear Cuenta</button>
                         </div>
                         <div class="card-footer">
                             <div class="p-3"></div>
@@ -215,6 +215,7 @@
       } else {
         this.title = 'Crear cuenta';
         this.disabled = false;
+        this.getLastNumber();
       }
     },
     data() {
@@ -225,6 +226,7 @@
           "text": "$vuetify.dataIterator.rowsPerPageAll",
           "value": -1
         }],
+        facturaNum: null,
         disabled: true,
         search: '',
         subtotal: 0,
@@ -253,11 +255,22 @@
       }
     },
     methods: {
+      getLastNumber: function () {
+        axios
+          .get('/factura/last')
+          .then(response => {
+            this.facturaNum = response.data
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      },
       getFactura: function () {
         axios
           .get('/factura/' + this.$route.params.slug)
           .then(response => {
             this.cliente = response.data.data,
+            this.facturaNum = this.cliente.id,
             this.newProducto = response.data.data.productos
           })
           .catch(error => {
@@ -269,7 +282,6 @@
         return '$ ' + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
       },
       formSend: function () {
-        console.log(Object.keys(this.cliente).length);
         if (Object.keys(this.cliente).length == 0) {
           this.alertSwal('error', 'Es necesario seleccionar un cliente');
         } else if (this.newProducto.length <= 0) {
@@ -282,11 +294,9 @@
               url: '/factura',
               data: this.cliente,
             })
-            .then(function (res) {
-              console.log(res)
+            .then(response => {
               this.alertSwal('success', 'Se ha generado una nueva factura');
-              setTimeout(window.location = "/factura/" + response.data, 2000);
-              //window.location = "/factura/"+ res.data.message
+              this.$router.push({ path: '/facturas/'+ response.data.message });
             })
             .catch(function (err) {
               console.log(err)

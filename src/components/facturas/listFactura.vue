@@ -7,12 +7,11 @@
     </v-card-title>
     <v-data-table  :headers="headers" :items="facturas" :search="search" :rows-per-page-items="rows" class="elevation-1" :pagination.sync="pagination" light>
       <template v-slot:items="props">
-        <td class="text-xs-left">{{ props.item.created_at }}</td>
+        <td class="text-xs-left">{{ props.item.id }}</td>
+        <td class="text-xs-left">{{ props.item.created_at.substr(0, 10) }}</td>
         <td class="text-xs-left">{{ props.item.nombre }}</td>
         <td class="text-xs-left">{{ props.item.nit }}</td>
         <td class="text-xs-left">{{ props.item.correo }}</td>
-        <td class="text-xs-left">{{ props.item.telefono }}</td>
-        <td class="text-xs-left">{{ props.item.direccion }}</td>
         <td class="text-xs-left">{{ props.item.ciudad }}</td>
         <td>
           <router-link class="router-links" :to="'/facturas/'+props.item.id">
@@ -59,6 +58,10 @@
         },
         search: '',
         headers: [{
+          text: 'No.',
+          value: 'id'
+        },
+        {
           text: 'Fecha',
           value: 'created_at'
         },
@@ -74,14 +77,6 @@
           {
             text: 'Correo',
             value: 'correo'
-          },
-          {
-            text: 'Telefono',
-            value: 'telefono'
-          },
-          {
-            text: 'Dirección',
-            value: 'direccion'
           },
           {
             text: 'Ciudad',

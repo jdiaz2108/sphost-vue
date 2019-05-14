@@ -101,7 +101,7 @@ export default {
         ]
       },
       {
-        action: 'archive',
+        action: 'group',
         title: 'Usuarios',
         items: [{
             title: 'Listar Usuarios',

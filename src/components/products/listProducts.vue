@@ -40,7 +40,6 @@
     methods: {
             onClickButton: function (event) {
       this.$emit('onClickButton', event);
-      console.log(event)
     },
       getAllData: function (id) {
         axios({
