@@ -86,12 +86,10 @@
             if (this.$route.meta.crudStatus == 'show') {
                  this.title = 'Ver Cliente';
                  this.getCliente();
-                       console.log('montado show');
             } else {
                 this.title = 'Crear Cliente';
                 this.cliente.ide = 0;
                 this.disabled = false;
-                      console.log('montado create');
             }
         },
         data() {

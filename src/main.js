@@ -21,7 +21,7 @@ Vue.use(Vuetify)
    key: 'd274ae81d8186b0c3d42',
    cluster: 'us2',
    encrypted: false,
-   authEndpoint: backend+'broadcasting/auth',
+   authEndpoint: 'http://localhost:8000/broadcasting/auth',
     auth: {
       headers: {
         'Authorization': localStorage.Authorization,
@@ -37,8 +37,6 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !localStorage.Authorization) {
     next('/login');
   } else {
-    console.log(to.name);
-    console.log();
     if (to.name == 'login' && localStorage.Authorization) {
       next('/');
     } else {
@@ -55,7 +53,7 @@ new Vue({
   components: { App },
   template: '<App/>',
   created () {
-    axios.defaults.baseURL = backend+'api'
+    axios.defaults.baseURL = 'http://localhost:8000/api'
     axios.defaults.headers.common['Authorization'] = localStorage.Authorization
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -70,7 +68,7 @@ new Vue({
       backend: 'http://backend.solopendones.host/',
       host: 'http://localhost:8000/',
       auth: false,
-      linkLogo: backend+'images/logointranet.jpg',
+      linkLogo: 'http://localhost:8000/images/logointranet.jpg',
       drawer: true,
       isLoad: false,
       user: null,
@@ -83,18 +81,18 @@ new Vue({
     .here((users) => {
       this.usersNumber = users.length;
       this.allUsers = users;
-        console.log(users);
+        // console.log(users);
     })
     .joining((user) => {
       this.usersNumber += 1;
-        console.log(user.name);
+        // console.log(user.name);
         this.allUsers.push(user)
     })
     .leaving((user) => {
       this.usersNumber -= 1;
       let i = this.allUsers.map(item => item.id).indexOf(user.id) // find index of your object
       this.allUsers.splice(i, 1)
-        console.log(user.name);
+        // console.log(user.name);
     });
   },
 })

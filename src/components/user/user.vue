@@ -51,11 +51,11 @@
             <div class="dropdown-divider"></div>
             <div v-if="this.$route.meta.crudStatus == 'show'">
                 <div v-if="disabled == true">
-                    <a role="button" @click="disabled = false; title = 'Editar cliente'" class="btn btn-primary btn-lg text-light float-right"><i
+                    <a role="button" @click="disabled = false; title = titleEdit" class="btn btn-primary btn-lg text-light float-right"><i
                             class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar</a>
                 </div>
                 <div v-if="disabled == false">
-                    <a role="button" @click="disabled = true; title = 'Ver cliente'" class="btn btn-danger btn-lg float-right text-white mx-1">Cancelar</a>
+                    <a role="button" @click="disabled = true; title = titleSee" class="btn btn-danger btn-lg float-right text-white mx-1">Cancelar</a>
                     <a role="button" @click="updateObject()" class="btn btn-warning btn-lg float-right mx-1">Guardar</a>
                 </div>
             </div>
