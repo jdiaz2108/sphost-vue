@@ -3,6 +3,44 @@
 
 
 <div class="row">
+
+      <div class="col-lg-3 col-md-6 mb-4 mt-4">
+        <div class="card card-cascade narrower moon-gradient text-white">
+          <div class="card-body card-body-cascade">
+            <h4 class="font-weight-bold card-title">{{bitcoin.chartName}}</h4>
+            <h5 class="pink-text pt-1"><i class="fas fa-utensils"></i> {{bitcoinUsd}}</h5>
+          </div>
+        </div>
+      </div>
+
+            <div class="col-lg-3 col-md-6 mb-4 mt-4">
+        <div class="card card-cascade narrower moon-gradient text-white">
+          <div class="card-body card-body-cascade">
+            <h4 class="font-weight-bold card-title">{{bitcoin.chartName}}</h4>
+            <h5 class="pink-text pt-1"><i class="fas fa-utensils"></i> {{bitcoinUsd}}</h5>
+          </div>
+        </div>
+      </div>
+
+            <div class="col-lg-3 col-md-6 mb-4 mt-4">
+        <div class="card card-cascade narrower moon-gradient text-white">
+          <div class="card-body card-body-cascade">
+            <h4 class="font-weight-bold card-title">{{bitcoin.chartName}}</h4>
+            <h5 class="pink-text pt-1"><i class="fas fa-utensils"></i> {{bitcoinUsd}}</h5>
+          </div>
+        </div>
+      </div>
+
+            <div class="col-lg-3 col-md-6 mb-4 mt-4">
+        <div class="card card-cascade narrower moon-gradient text-white">
+          <div class="card-body card-body-cascade">
+            <h4 class="font-weight-bold card-title">{{bitcoin.chartName}}</h4>
+            <h5 class="pink-text pt-1"><i class="fas fa-utensils"></i> {{bitcoinUsd}}</h5>
+          </div>
+        </div>
+      </div>
+
+
   <div class="col-6">
     <div class="card card-cascade wider" style="border: 0">
       <div class="elevation-20 rounded" style="z-index: 2">
@@ -22,6 +60,17 @@
       </div>
     </div>
   </div>
+
+    <div class="col-lg-4 col-md-6 mb-4 mt-4">
+        <div class="card card-cascade narrower moon-gradient text-white">
+          <div class="card-body card-body-cascade">
+            <h4 class="font-weight-bold card-title">Bitcoin</h4>
+            <h5 class="pink-text pt-1"><i class="fas fa-utensils"></i>text</h5>
+          </div>
+        </div>
+      </div>
+
+
   <div class="col-lg-4 col-md-6 mb-4 mt-4">
         <!-- Card Narrower -->
         <div class="card card-cascade narrower">
@@ -100,11 +149,16 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'HelloWorld',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App a ver si esta mka si esta funcionando wbn',
+      bitcoin: {},
+      bitcoinUsd: {
+        rate: null
+      },
       items: [
         {
           color: 'red lighten-2',
@@ -124,7 +178,25 @@ export default {
         }
       ]
     }
-  }
+  },
+  created() {
+    this.getBitcoin()
+  },
+  methods: {
+    getBitcoin: function () {
+        var instance = axios.create();
+        instance.defaults.headers.common = {};
+          instance
+          .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+          .then(response => {
+              this.bitcoin = response.data,
+              this.bitcoinUsd = response.data.bpi.USD.rate.substr(0, 8)
+          })
+          .catch(error => {
+              console.log(error)
+          })
+  },
+  },
 }
 </script>
 
