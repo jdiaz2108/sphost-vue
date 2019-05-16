@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Home from '@/components/home'
 import logComponent from '@/components/auth/auth'
 import Cliente from '@/components/clientes/cliente.vue'
 import ListClientes from '@/components/clientes/listCliente'
@@ -10,6 +10,7 @@ import Products from '@/components/products/products'
 import ListProducts from '@/components/products/listProducts'
 import User from '@/components/user/user'
 import ListUser from '@/components/user/listUser'
+import Mapa from '@/components/map/map'
 
 Vue.use(Router)
 
@@ -22,8 +23,8 @@ export default new Router({
     },
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld,
+      name: 'Home',
+      component: Home,
       meta: { requiresAuth: true }
     },
     {
@@ -91,6 +92,11 @@ export default new Router({
       path: '/user/:slug',
       component: User,
       meta: {crudStatus: 'show', requiresAuth: true}
+    },
+    {
+      path: '/map',
+      component: Mapa,
+      meta: {requiresAuth: true}
     }
   ],
   mode: 'history'
