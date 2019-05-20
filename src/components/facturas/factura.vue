@@ -270,7 +270,7 @@
           .get('/factura/' + this.$route.params.slug)
           .then(response => {
             this.cliente = response.data.data,
-            this.facturaNum = this.cliente.id,
+            this.facturaNum = this.cliente.number,
             this.newProducto = response.data.data.productos
           })
           .catch(error => {
@@ -289,6 +289,7 @@
         } else {
           this.cliente.date = this.date;
           this.cliente.newProducto = this.newProducto;
+          this.cliente.facturaNum = this.facturaNum;
           axios({
               method: 'post',
               url: '/factura',
