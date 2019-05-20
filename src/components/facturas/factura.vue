@@ -270,6 +270,7 @@
           .get('/factura/' + this.$route.params.slug)
           .then(response => {
             this.cliente = response.data.data,
+            this.cliente.slug = response.data.data.cliente.slug
             this.facturaNum = this.cliente.number,
             this.newProducto = response.data.data.productos
           })
